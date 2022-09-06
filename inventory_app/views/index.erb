@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Aldo Shoes</title>
+    <script type="text/javascript">
+      var ws = null;
+      function init() {
+        ws = new WebSocket("ws://localhost:8080");
+
+        ws.onmessage = function(msg) {
+          json_data = JSON.parse(msg.data);
+
+
+          // displays the most recent updated store details
+          document.getElementById("display").innerHTML = "Store Name: " + json_data['store'] + ', Model Name: ' + json_data['model'] + ', Current Stock: ' + json_data['inventory']
+
+          // // reload the page if new models are added
+          // if (document.getElementById(json_data['store'] + json_data['model']) == null) {
+          //   document.location.reload();
+          // }
+
+          // updates the inventory stock details
+          document.getElementById(json_data['store'] + json_data['model']).innerHTML = json_data['inventory']
+
+          // alert when inventory stock goes below 5
+          if (json_data['inventory'] < 5) {
+            alert('Inventory for '+ json_data['model'] + ' at '+ json_data['store'] + ' has gone below 5!!'); }
+
+          // alert when inventory stock goes above 250
+          if (json_data['inventory'] > 250) {
+            alert('Inventory for '+ json_data['model'] + ' at '+ json_data['store'] + ' has gone above 250!!'); }
+        }
+      }
+    </script>
+  </head>
+  <body onload="init();">
+    <h2 style="text-align:center">Aldo Shoes Inventory</h2></br>
+    <h4>Most recent sale: <p id='display'></p></h4>
+    <table border="1", style="width:95%; margin-left:auto; margin-right:auto;">
+      <% @stores.each do |store_data| %>
+        <tr>
+          <td colspan="3" style="text-align:center"><b>StoreName:&nbsp;<%= store_data.first%></b></td>
+        </tr>
+        <tr>
+          <th>Model</th>
+          <th>Inventory Details</th>
+        </tr>
+        <% store_data[1].each do |key, value|%>
+          <tr>
+            <td style="text-align: center;width: 50%;"><%= key %></td>
+            <td id="<%= store_data.first + key %>" style="text-align: center;width: 50%;"><%= value %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </body>
+</html>
