@@ -10,7 +10,7 @@
           json_data = JSON.parse(msg.data);
 
 
-          // displays the most recent updated store details
+          // displays the most recently updated store details
           document.getElementById("display").innerHTML = "Store Name: " + json_data['store'] + ', Model Name: ' + json_data['model'] + ', Current Stock: ' + json_data['inventory']
 
           // // reload the page if new models are added
